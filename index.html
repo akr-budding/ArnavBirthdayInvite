@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Arnav Turns ONE - a magical first birthday invitation.">
+  <title>Arnav Turns ONE!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="sky-canvas" aria-hidden="true"></canvas>
+
+  <div class="ambient" aria-hidden="true">
+    <span class="cloud cloud-one"></span>
+    <span class="cloud cloud-two"></span>
+    <span class="cloud cloud-three"></span>
+    <span class="moon-glow"></span>
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+    <span class="bubble bubble-three"></span>
+    <span class="bubble bubble-four"></span>
+  </div>
+
+  <button class="music-toggle" type="button" aria-pressed="false" aria-label="Toggle soft background music" title="Play soft music">
+    <span class="music-icon">♪</span>
+  </button>
+
+  <main>
+    <section class="hero section">
+      <div class="floating-toys" aria-hidden="true">
+        <span class="balloon balloon-blue"></span>
+        <span class="balloon balloon-gold"></span>
+        <span class="balloon balloon-white"></span>
+        <span class="star star-a">✦</span>
+        <span class="star star-b">✧</span>
+        <span class="pinwheel"><i></i></span>
+        <span class="teddy">🧸</span>
+        <span class="block block-a">A</span>
+        <span class="block block-b">1</span>
+      </div>
+
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Birthday Celebration of Arnav</p>
+        <h1>Arnav Turns <span>ONE!</span></h1>
+        <p class="subtitle">Join us to celebrate the most precious milestone of our little prince</p>
+      </div>
+
+      <div class="baby-stage reveal">
+        <div class="halo"></div>
+        <img src="assets/arnav-baby-hero.png" alt="Cute illustrated baby boy birthday centerpiece">
+      </div>
+
+      <div class="hero-details reveal">
+        <article class="glass-card date-card">
+          <span>July</span>
+          <strong>14</strong>
+          <small>2026</small>
+        </article>
+        <article class="glass-card detail-card">
+          <p>Birthday Celebration of Arnav</p>
+          <p>Date: 14th July 2026</p>
+          <p>Venue: Noida, India</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="countdown section reveal" aria-labelledby="countdown-title">
+      <p class="script">The magic begins in</p>
+      <h2 id="countdown-title">Save the Date</h2>
+      <div class="timer" role="timer" aria-live="polite">
+        <div><strong id="days">00</strong><span>Days</span></div>
+        <div><strong id="hours">00</strong><span>Hours</span></div>
+        <div><strong id="minutes">00</strong><span>Minutes</span></div>
+        <div><strong id="seconds">00</strong><span>Seconds</span></div>
+      </div>
+    </section>
+
+    <section class="message-band section reveal">
+      <div class="storybook">
+        <span class="tiny-crown">♛</span>
+        <p>“Tiny hands, tiny feet, our little Arnav is turning ONE! Your presence will make this day even more special.”</p>
+      </div>
+    </section>
+
+    <section class="family section reveal" aria-labelledby="family-title">
+      <p class="script">With blessings and love</p>
+      <h2 id="family-title">Our Family</h2>
+      <div class="family-grid">
+        <article class="glass-card">
+          <span>Father</span>
+          <strong>Rana Vikram Singh</strong>
+        </article>
+        <article class="glass-card">
+          <span>Mother</span>
+          <strong>Aparna Ranjan</strong>
+        </article>
+        <article class="glass-card">
+          <span>Grandparents</span>
+          <strong>Hemchandra Singh</strong>
+          <strong>Anita Singh</strong>
+        </article>
+        <article class="glass-card">
+          <span>Maternal Grandparents</span>
+          <strong>Shiv Ranjan Kumar Kamal</strong>
+          <strong>Nutan Kumari</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="venue section reveal" aria-labelledby="venue-title">
+      <div class="venue-card glass-card">
+        <p class="script">A joyful day awaits</p>
+        <h2 id="venue-title">Noida, India</h2>
+        <p class="venue-copy">Come dressed in your brightest smiles and join us for cake, cuddles, laughter, and memories wrapped in stardust.</p>
+        <div class="actions">
+          <a class="btn map-btn" href="https://www.google.com/maps/search/?api=1&query=Noida%2C%20India" target="_blank" rel="noopener">Open Map</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Crafted with lots of love 💓 by mamaJi
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
