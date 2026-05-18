@@ -430,8 +430,8 @@ footer {
 
 .music-toggle {
   position: fixed;
-  right: 18px;
-  top: 18px;
+  right: max(14px, env(safe-area-inset-right));
+  top: max(14px, env(safe-area-inset-top));
   width: 54px;
   height: 54px;
   border: 1px solid rgba(255,255,255,0.88);
@@ -700,11 +700,31 @@ footer {
   }
 
   .hero {
-    padding-top: 88px;
+    min-height: auto;
+    padding-top: 86px;
+    padding-bottom: 28px;
+    gap: 10px;
   }
 
   h1 {
-    font-size: clamp(3.75rem, 19vw, 6.6rem);
+    max-width: 100%;
+    font-size: clamp(3.15rem, 15.5vw, 4.9rem);
+    line-height: 0.92;
+  }
+
+  h1 span {
+    font-size: 1.05em;
+  }
+
+  .eyebrow {
+    font-size: 0.76rem;
+  }
+
+  .subtitle {
+    max-width: 340px;
+    margin-top: 14px;
+    font-size: 1rem;
+    line-height: 1.48;
   }
 
   .timer,
@@ -731,23 +751,55 @@ footer {
   }
 
   .baby-stage {
-    min-height: 380px;
+    min-height: 292px;
+    margin-top: 0;
+  }
+
+  .baby-stage::before {
+    width: min(78vw, 292px);
+  }
+
+  .halo {
+    width: min(72vw, 260px);
+  }
+
+  .baby-stage img {
+    width: min(72vw, 270px);
+    border-width: 7px;
   }
 
   .floating-toys .teddy,
+  .balloon,
   .block-b,
   .star-b {
     display: none;
   }
 
-  .balloon {
-    width: 46px;
-    height: 62px;
-  }
-
   .music-toggle {
     width: 48px;
     height: 48px;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero {
+    padding-top: 78px;
+  }
+
+  h1 {
+    font-size: clamp(2.85rem, 15vw, 4.2rem);
+  }
+
+  .subtitle {
+    max-width: 315px;
+  }
+
+  .baby-stage {
+    min-height: 270px;
+  }
+
+  .baby-stage img {
+    width: min(72vw, 246px);
   }
 }
 

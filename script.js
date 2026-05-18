@@ -144,6 +144,11 @@ let musicNodes = [];
 let musicTimer;
 let isPlaying = false;
 const musicButton = document.querySelector(".music-toggle");
+const birthdayMusic = document.querySelector("#birthday-music");
+
+if (birthdayMusic) {
+  birthdayMusic.volume = 0.72;
+}
 
 function noteToFrequency(note) {
   return 440 * (2 ** ((note - 69) / 12));
@@ -184,6 +189,20 @@ function playLullabyLoop() {
 }
 
 async function startMusic() {
+  if (birthdayMusic) {
+    try {
+      birthdayMusic.currentTime = birthdayMusic.currentTime || 0;
+      await birthdayMusic.play();
+      isPlaying = true;
+      musicButton.classList.add("is-playing");
+      musicButton.setAttribute("aria-pressed", "true");
+      musicButton.setAttribute("title", "Music playing");
+      return;
+    } catch {
+      // Fall back to generated chimes when direct audio playback is unavailable.
+    }
+  }
+
   const AudioEngine = window.AudioContext || window.webkitAudioContext;
   if (!AudioEngine) {
     musicButton.setAttribute("title", "Soft music is not supported in this browser.");
@@ -204,6 +223,10 @@ async function startMusic() {
 }
 
 function stopMusic() {
+  if (birthdayMusic) {
+    birthdayMusic.pause();
+  }
+
   clearInterval(musicTimer);
   musicNodes.forEach((node) => {
     try {
