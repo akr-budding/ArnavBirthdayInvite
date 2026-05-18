@@ -142,9 +142,14 @@ setTimeout(() => burst(width * 0.5, height * 0.18), 1160);
 let isPlaying = false;
 const musicButton = document.querySelector(".music-toggle");
 const birthdayMusic = document.querySelector("#birthday-music");
+let musicWasRequested = false;
+let lastMusicToggle = 0;
 
 if (birthdayMusic) {
   birthdayMusic.volume = 0.8;
+  birthdayMusic.muted = false;
+  birthdayMusic.playsInline = true;
+  birthdayMusic.load();
 }
 
 function setMusicState(playing) {
@@ -152,20 +157,25 @@ function setMusicState(playing) {
   musicButton.classList.toggle("is-playing", playing);
   musicButton.setAttribute("aria-pressed", String(playing));
   musicButton.setAttribute("title", playing ? "Music playing" : "Play music");
+  musicButton.querySelector(".music-icon").textContent = playing ? "❚❚" : "♪";
 }
 
 async function startMusic(userRequested = false) {
   if (!birthdayMusic) return;
+  musicWasRequested = true;
 
   try {
     birthdayMusic.muted = false;
     birthdayMusic.volume = 0.8;
+    if (birthdayMusic.readyState < 2) {
+      birthdayMusic.load();
+    }
     await birthdayMusic.play();
     setMusicState(true);
-  } catch {
+  } catch (error) {
     setMusicState(false);
     if (userRequested) {
-      musicButton.setAttribute("title", "Tap again to allow music");
+      musicButton.setAttribute("title", "Tap to start music");
     }
   }
 }
@@ -173,6 +183,7 @@ async function startMusic(userRequested = false) {
 function stopMusic() {
   if (!birthdayMusic) return;
 
+  musicWasRequested = false;
   birthdayMusic.pause();
   setMusicState(false);
 }
@@ -181,16 +192,19 @@ window.addEventListener("load", () => {
   startMusic(false);
 });
 
-document.addEventListener("pointerdown", (event) => {
-  if (event.target.closest(".music-toggle")) return;
+function handleFirstGesture(event) {
+  if (event.target && event.target.closest && event.target.closest(".music-toggle")) return;
 
   if (birthdayMusic && birthdayMusic.paused) {
     startMusic(false);
   }
-}, { once: true });
+}
+
+document.addEventListener("pointerdown", handleFirstGesture, { once: true });
+document.addEventListener("touchstart", handleFirstGesture, { once: true, passive: true });
 
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && birthdayMusic && birthdayMusic.paused && isPlaying) {
+  if (!document.hidden && birthdayMusic && birthdayMusic.paused && musicWasRequested) {
     startMusic(false);
   }
 });
@@ -200,11 +214,21 @@ if (birthdayMusic) {
   birthdayMusic.addEventListener("pause", () => setMusicState(false));
 }
 
-musicButton.addEventListener("click", async () => {
-  isPlaying = true;
+async function toggleMusic(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const now = Date.now();
+  if (now - lastMusicToggle < 450) return;
+  lastMusicToggle = now;
+
   if (birthdayMusic && !birthdayMusic.paused) {
     stopMusic();
   } else {
     await startMusic(true);
   }
-});
+}
+
+musicButton.addEventListener("pointerdown", toggleMusic);
+musicButton.addEventListener("touchstart", toggleMusic, { passive: false });
+musicButton.addEventListener("click", toggleMusic);
