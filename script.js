@@ -139,114 +139,72 @@ setTimeout(() => burst(width * 0.22, height * 0.22), 360);
 setTimeout(() => burst(width * 0.72, height * 0.26), 760);
 setTimeout(() => burst(width * 0.5, height * 0.18), 1160);
 
-let audioContext;
-let musicNodes = [];
-let musicTimer;
 let isPlaying = false;
 const musicButton = document.querySelector(".music-toggle");
 const birthdayMusic = document.querySelector("#birthday-music");
 
 if (birthdayMusic) {
-  birthdayMusic.volume = 0.72;
+  birthdayMusic.volume = 0.8;
 }
 
-function noteToFrequency(note) {
-  return 440 * (2 ** ((note - 69) / 12));
+function setMusicState(playing) {
+  isPlaying = playing;
+  musicButton.classList.toggle("is-playing", playing);
+  musicButton.setAttribute("aria-pressed", String(playing));
+  musicButton.setAttribute("title", playing ? "Music playing" : "Play music");
 }
 
-function playBell(note, startTime, duration) {
-  const osc = audioContext.createOscillator();
-  const harmony = audioContext.createOscillator();
-  const gain = audioContext.createGain();
-  const filter = audioContext.createBiquadFilter();
+async function startMusic(userRequested = false) {
+  if (!birthdayMusic) return;
 
-  osc.type = "sine";
-  harmony.type = "triangle";
-  osc.frequency.value = noteToFrequency(note);
-  harmony.frequency.value = noteToFrequency(note - 12);
-  filter.type = "lowpass";
-  filter.frequency.value = 2200;
-
-  gain.gain.setValueAtTime(0.0001, startTime);
-  gain.gain.exponentialRampToValueAtTime(0.12, startTime + 0.05);
-  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-
-  osc.connect(filter);
-  harmony.connect(filter);
-  filter.connect(gain);
-  gain.connect(audioContext.destination);
-  osc.start(startTime);
-  harmony.start(startTime);
-  osc.stop(startTime + duration + 0.06);
-  harmony.stop(startTime + duration + 0.06);
-  musicNodes.push(osc, harmony, gain, filter);
-}
-
-function playLullabyLoop() {
-  const now = audioContext.currentTime;
-  const melody = [72, 76, 79, 76, 74, 72, 69, 72, 67, 69, 72, 76];
-  melody.forEach((note, index) => playBell(note, now + index * 0.46, 0.42));
-}
-
-async function startMusic() {
-  if (birthdayMusic) {
-    try {
-      birthdayMusic.currentTime = birthdayMusic.currentTime || 0;
-      await birthdayMusic.play();
-      isPlaying = true;
-      musicButton.classList.add("is-playing");
-      musicButton.setAttribute("aria-pressed", "true");
-      musicButton.setAttribute("title", "Music playing");
-      return;
-    } catch {
-      // Fall back to generated chimes when direct audio playback is unavailable.
+  try {
+    birthdayMusic.muted = false;
+    birthdayMusic.volume = 0.8;
+    await birthdayMusic.play();
+    setMusicState(true);
+  } catch {
+    setMusicState(false);
+    if (userRequested) {
+      musicButton.setAttribute("title", "Tap again to allow music");
     }
   }
-
-  const AudioEngine = window.AudioContext || window.webkitAudioContext;
-  if (!AudioEngine) {
-    musicButton.setAttribute("title", "Soft music is not supported in this browser.");
-    return;
-  }
-
-  audioContext = audioContext || new AudioEngine();
-  if (audioContext.state === "suspended") {
-    await audioContext.resume();
-  }
-
-  playLullabyLoop();
-  musicTimer = setInterval(playLullabyLoop, 5520);
-  isPlaying = true;
-  musicButton.classList.add("is-playing");
-  musicButton.setAttribute("aria-pressed", "true");
-  musicButton.setAttribute("title", "Music playing");
 }
 
 function stopMusic() {
-  if (birthdayMusic) {
-    birthdayMusic.pause();
-  }
+  if (!birthdayMusic) return;
 
-  clearInterval(musicTimer);
-  musicNodes.forEach((node) => {
-    try {
-      if (typeof node.stop === "function") node.stop();
-      if (typeof node.disconnect === "function") node.disconnect();
-    } catch {
-      // Nodes may already be stopped by their natural envelope.
-    }
-  });
-  musicNodes = [];
-  isPlaying = false;
-  musicButton.classList.remove("is-playing");
-  musicButton.setAttribute("aria-pressed", "false");
-  musicButton.setAttribute("title", "Play soft music");
+  birthdayMusic.pause();
+  setMusicState(false);
+}
+
+window.addEventListener("load", () => {
+  startMusic(false);
+});
+
+document.addEventListener("pointerdown", (event) => {
+  if (event.target.closest(".music-toggle")) return;
+
+  if (birthdayMusic && birthdayMusic.paused) {
+    startMusic(false);
+  }
+}, { once: true });
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && birthdayMusic && birthdayMusic.paused && isPlaying) {
+    startMusic(false);
+  }
+});
+
+if (birthdayMusic) {
+  birthdayMusic.addEventListener("play", () => setMusicState(true));
+  birthdayMusic.addEventListener("pause", () => setMusicState(false));
 }
 
 musicButton.addEventListener("click", async () => {
-  if (!isPlaying) {
-    await startMusic();
-  } else {
+  isPlaying = true;
+  if (birthdayMusic && !birthdayMusic.paused) {
     stopMusic();
+  } else {
+    await startMusic(true);
   }
 });
