@@ -63,7 +63,7 @@ function resizeCanvas() {
 }
 
 function makeParticle(x, y, type = "confetti") {
-  const colors = ["#ffd86b", "#74c9ff", "#ffffff", "#ffc9dd", "#bff5df"];
+  const colors = ["#ffce5a", "#2f8af5", "#ffffff", "#0d2b54", "#7fb6ff"];
   const angle = Math.random() * Math.PI * 2;
   const speed = type === "firework" ? 2 + Math.random() * 6 : 0.7 + Math.random() * 2.3;
 
