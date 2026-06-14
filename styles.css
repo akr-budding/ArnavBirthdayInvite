@@ -203,6 +203,45 @@ h2 {
   clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%);
 }
 
+.party-cap {
+  position: absolute;
+  z-index: 5;
+  top: 3%;
+  left: 56%;
+  width: 64px;
+  height: 86px;
+  transform: translateX(-50%) rotate(16deg);
+  transform-origin: bottom center;
+  pointer-events: none;
+}
+
+.party-cap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background:
+    repeating-linear-gradient(125deg,
+      #1762d4 0 14px,
+      #ffffff 14px 28px,
+      #ffce5a 28px 42px,
+      #2f8af5 42px 56px);
+  filter: drop-shadow(0 10px 14px rgba(13, 43, 84, 0.35));
+}
+
+.party-cap::after {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #ffce5a 60%, #f0a500);
+  box-shadow: 0 6px 10px rgba(13, 43, 84, 0.3);
+}
+
 .baby-stage img {
   position: relative;
   width: min(78vw, 310px);
